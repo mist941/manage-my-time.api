@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {SignInDto} from './dto/sign-in.dto';
 import {UsersService} from '../users/users.service';
-import {UserDocument} from '../users/users.schema';
+import {User} from '../users/users.schema';
 
 @Injectable()
 export class AuthService {
@@ -10,7 +10,7 @@ export class AuthService {
   ) {
   }
 
-  async signIn(params: SignInDto): Promise<UserDocument> {
+  async signIn(params: SignInDto): Promise<User> {
     const user = await this.userService.getUserByAnyParams(params);
     if (user) return user;
     return this.userService.create(params);
