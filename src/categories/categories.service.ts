@@ -54,7 +54,7 @@ export class CategoriesService {
     }
   }
 
-  async deleteCategoey(id: string, currentUser: User): Promise<HttpException> {
+  async deleteCategory(id: string, currentUser: User): Promise<HttpException> {
     try {
       const user = await this.userService.getUserByAnyParams(currentUser);
       await this.categoryModel.deleteOne({_id: id, user});
