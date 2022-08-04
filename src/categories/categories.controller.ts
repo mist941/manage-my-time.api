@@ -1,4 +1,4 @@
-import {Controller, Get, UseGuards} from '@nestjs/common';
+import {Controller, Delete, Get, Param, UseGuards} from '@nestjs/common';
 import {CategoriesService} from './categories.service';
 import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
@@ -13,5 +13,11 @@ export class CategoriesController {
   @UseGuards(AuthGuard)
   categories(@CurrentUser() user: User) {
     return this.categoriesService.findCategoriesByUser(user);
+  }
+
+  @Delete('/:id')
+  @UseGuards(AuthGuard)
+  deleteCategory(@Param() params, @CurrentUser() user: User) {
+    return this.categoriesService.deleteCategoey(params.id, user);
   }
 }

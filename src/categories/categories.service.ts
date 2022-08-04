@@ -1,4 +1,4 @@
-import {forwardRef, Inject, Injectable} from '@nestjs/common';
+import {forwardRef, HttpException, HttpStatus, Inject, Injectable, InternalServerErrorException} from '@nestjs/common';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {Category, CategoryDocument} from './categories.schema';
@@ -29,16 +29,38 @@ export class CategoriesService {
   ]
 
   async create(params: CreateCategoryDto): Promise<Category> {
-    const category = await new this.categoryModel(params);
-    return category.save();
+    try {
+      const category = await new this.categoryModel(params);
+      return category.save();
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
   async addDefaultCategories(user: User): Promise<void> {
-    await this.defaultCategories.forEach(c => this.create({...c, user}));
+    try {
+      await this.defaultCategories.forEach(c => this.create({...c, user}));
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
   async findCategoriesByUser(currentUser: User): Promise<Array<Category>> {
-    const user = await this.userService.getUserByAnyParams(currentUser);
-    return this.categoryModel.find({user});
+    try {
+      const user = await this.userService.getUserByAnyParams(currentUser);
+      return this.categoryModel.find({user}).select('-__v');
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async deleteCategoey(id: string, currentUser: User): Promise<HttpException> {
+    try {
+      const user = await this.userService.getUserByAnyParams(currentUser);
+      await this.categoryModel.deleteOne({_id: id, user});
+      return new HttpException('Category was deleted!', HttpStatus.OK);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }
