@@ -3,11 +3,9 @@ import {User} from '../../users/users.schema';
 
 export class CreateCategoryDto {
   @IsString()
-  @IsNotEmpty()
   color: string;
 
   @IsString()
-  @IsNotEmpty()
   icon: string;
 
   @IsString()

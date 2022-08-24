@@ -9,13 +9,11 @@ export type CategoryDocument = Category & Document;
 export class Category {
   @Prop({
     type: mongoose.Schema.Types.String,
-    required: true,
   })
   color: string;
 
   @Prop({
     type: mongoose.Schema.Types.String,
-    required: true,
   })
   icon: string;
 

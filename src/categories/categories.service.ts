@@ -37,6 +37,11 @@ export class CategoriesService {
     }
   }
 
+  async createEmptyCategory(currentUser: User): Promise<Category> {
+    const user = await this.userService.getUserByAnyParams(currentUser);
+    return this.create({color: null, icon: null, name: 'Category', user});
+  }
+
   async addDefaultCategories(user: User): Promise<void> {
     try {
       await this.defaultCategories.forEach(c => this.create({...c, user}));
