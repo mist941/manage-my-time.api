@@ -38,8 +38,22 @@ export class CategoriesService {
   }
 
   async createEmptyCategory(currentUser: User): Promise<Category> {
-    const user = await this.userService.getUserByAnyParams(currentUser);
-    return this.create({color: null, icon: null, name: 'Category', user});
+    try {
+      const user = await this.userService.getUserByAnyParams(currentUser);
+      return this.create({color: null, icon: null, name: 'Category', user});
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async changeCategory(id, params: Category): Promise<Category> {
+    try {
+      return this.categoryModel
+        .findByIdAndUpdate(id, params, {new: true})
+        .select('-__v');
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
   async addDefaultCategories(user: User): Promise<void> {
