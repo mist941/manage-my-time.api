@@ -5,6 +5,7 @@ import {Category, CategoryDocument} from './categories.schema';
 import {CreateCategoryDto} from './dto/create-category.dto';
 import {User} from '../users/users.schema';
 import {UsersService} from '../users/users.service';
+import {UserParams} from '../users/types/user-params.type';
 
 @Injectable()
 export class CategoriesService {
@@ -37,7 +38,7 @@ export class CategoriesService {
     }
   }
 
-  async createEmptyCategory(currentUser: User): Promise<Category> {
+  async createEmptyCategory(currentUser:UserParams): Promise<Category> {
     try {
       const user = await this.userService.getUserByAnyParams(currentUser);
       return this.create({color: null, icon: null, name: 'Category', user});
@@ -64,7 +65,7 @@ export class CategoriesService {
     }
   }
 
-  async findCategoriesByUser(currentUser: User): Promise<Array<Category>> {
+  async findCategoriesByUser(currentUser: UserParams): Promise<Array<Category>> {
     try {
       const user = await this.userService.getUserByAnyParams(currentUser);
       return this.categoryModel.find({user}).select('-__v');
@@ -73,7 +74,16 @@ export class CategoriesService {
     }
   }
 
-  async deleteCategory(id: string, currentUser: User): Promise<HttpException> {
+  async findCategoryById(id: string): Promise<Category> {
+    try {
+      return this.categoryModel.findById(id);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+
+  async deleteCategory(id: string, currentUser: UserParams): Promise<HttpException> {
     try {
       const user = await this.userService.getUserByAnyParams(currentUser);
       await this.categoryModel.deleteOne({_id: id, user});

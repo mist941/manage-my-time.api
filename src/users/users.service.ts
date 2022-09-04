@@ -4,6 +4,7 @@ import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {CreateUserDto} from './dto/create-user.dto';
 import {CategoriesService} from '../categories/categories.service';
+import {UserParams} from './types/user-params.type';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +21,7 @@ export class UsersService {
     return user;
   }
 
-  async getUserByAnyParams(params: User): Promise<User> {
+  async getUserByAnyParams(params: UserParams): Promise<User> {
     const {google_id, email, stand_alone_key} = params;
 
     if (google_id && email) return this.userModel.findOne({google_id, email});

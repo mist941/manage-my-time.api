@@ -4,6 +4,7 @@ import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
 import {User} from '../users/users.schema';
 import {Category} from './categories.schema';
+import {UserParams} from '../users/types/user-params.type';
 
 @Controller('categories')
 export class CategoriesController {
@@ -12,19 +13,19 @@ export class CategoriesController {
 
   @Get('')
   @UseGuards(AuthGuard)
-  categories(@CurrentUser() user: User) {
+  categories(@CurrentUser() user: UserParams) {
     return this.categoriesService.findCategoriesByUser(user);
   }
 
   @Delete('/:id')
   @UseGuards(AuthGuard)
-  deleteCategory(@Param() params, @CurrentUser() user: User) {
+  deleteCategory(@Param() params, @CurrentUser() user: UserParams) {
     return this.categoriesService.deleteCategory(params.id, user);
   }
 
   @Post('/')
   @UseGuards(AuthGuard)
-  addCategory(@Param() params, @CurrentUser() user: User) {
+  addCategory(@Param() params, @CurrentUser() user: UserParams) {
     return this.categoriesService.createEmptyCategory(user);
   }
 

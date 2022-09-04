@@ -3,15 +3,15 @@ import {User} from '../../users/users.schema';
 
 export class CreateCategoryDto {
   @IsString()
-  color: string;
+  readonly color: string;
 
   @IsString()
-  icon: string;
+  readonly icon: string;
 
   @IsString()
   @IsNotEmpty()
-  name: string;
+  readonly name: string;
 
   @IsNotEmpty()
-  user: User;
+  readonly user: User;
 }
