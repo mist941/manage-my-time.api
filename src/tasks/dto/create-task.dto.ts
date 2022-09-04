@@ -1,7 +1,7 @@
 import {IsArray, IsDateString, IsNotEmpty, IsString, ValidateIf} from 'class-validator';
 import {TasksTypes} from '../types/tasks.types';
 
-export class CreateTaskDto {
+export class CreateTaskDTO {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
@@ -23,6 +23,5 @@ export class CreateTaskDto {
 
   @IsNotEmpty()
   @IsString()
-
   readonly type: TasksTypes;
 }

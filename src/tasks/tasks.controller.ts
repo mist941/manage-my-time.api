@@ -3,8 +3,8 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Param,
   Post,
+  Query,
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
@@ -12,8 +12,8 @@ import {TasksService} from './tasks.service';
 import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
 import {UserParams} from '../users/types/user-params.type';
-import {CreateTaskDto} from './dto/create-task.dto';
-
+import {CreateTaskDTO} from './dto/create-task.dto';
+import {FindTasksDTO} from './dto/filter-tasks.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -22,14 +22,15 @@ export class TasksController {
 
   @Get('')
   @UseGuards(AuthGuard)
-  tasks(@CurrentUser() user: UserParams) {
-
+  @UseInterceptors(ClassSerializerInterceptor)
+  tasks(@Query() queryParams: FindTasksDTO, @CurrentUser() user: UserParams) {
+    return this.tasksService.getTasks(queryParams, user);
   }
 
   @Post('')
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  createTask(@Body() params: CreateTaskDto, @CurrentUser() user: UserParams) {
+  createTask(@Body() params: CreateTaskDTO, @CurrentUser() user: UserParams) {
     return this.tasksService.create(params, user);
   }
 }

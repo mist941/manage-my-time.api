@@ -2,7 +2,6 @@ import {Body, Controller, Delete, Get, Param, Post, Put, UseGuards} from '@nestj
 import {CategoriesService} from './categories.service';
 import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
-import {User} from '../users/users.schema';
 import {Category} from './categories.schema';
 import {UserParams} from '../users/types/user-params.type';
 

@@ -3,7 +3,7 @@ import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {UsersService} from '../users/users.service';
 import {Task, TaskDocument} from './tasks.schema';
-import {CreateTaskDto} from './dto/create-task.dto';
+import {CreateTaskDTO} from './dto/create-task.dto';
 import {UserParams} from '../users/types/user-params.type';
 import {CategoriesService} from '../categories/categories.service';
 import {Category} from '../categories/categories.schema';
@@ -18,7 +18,7 @@ export class TasksService {
   ) {
   }
 
-  async create(params: CreateTaskDto, currentUser: UserParams): Promise<TaskEntity> {
+  async create(params: CreateTaskDTO, currentUser: UserParams): Promise<TaskEntity> {
     const user = await this.userService.getUserByAnyParams(currentUser);
 
     const preparedCategories: Category[] = await Promise.all(
@@ -38,6 +38,21 @@ export class TasksService {
     try {
       const task = await new this.taskModel(preparedParams);
       return new TaskEntity((await task.save()).toObject());
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async getTasks(queryParams, currentUser: UserParams) {
+    const user = await this.userService.getUserByAnyParams(currentUser);
+    const filterParams = {
+      type: queryParams.type,
+      user
+    }
+
+    try {
+      const tasks = await this.taskModel.find(filterParams);
+      return tasks.map(task => new TaskEntity(task.toObject()));
     } catch (error) {
       throw new InternalServerErrorException();
     }
