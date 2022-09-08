@@ -18,8 +18,8 @@ export class CategoriesController {
 
   @Delete('/:id')
   @UseGuards(AuthGuard)
-  deleteCategory(@Param() params, @CurrentUser() user: UserParams) {
-    return this.categoriesService.deleteCategory(params.id, user);
+  deleteCategory(@Param() params) {
+    return this.categoriesService.deleteCategory(params.id);
   }
 
   @Post('/')

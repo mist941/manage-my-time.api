@@ -1,7 +1,6 @@
 import {IsArray, IsDateString, IsNotEmpty, IsString, ValidateIf} from 'class-validator';
-import {TasksTypes} from '../types/tasks.types';
 
-export class CreateTaskDto {
+export class UpdateTaskDto {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
@@ -20,8 +19,4 @@ export class CreateTaskDto {
   @ValidateIf((object, value) => !!value)
   @IsDateString()
   readonly spent_time: Date;
-
-  @IsNotEmpty()
-  @IsString()
-  readonly type: TasksTypes;
 }

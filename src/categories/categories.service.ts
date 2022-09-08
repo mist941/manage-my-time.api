@@ -83,10 +83,9 @@ export class CategoriesService {
   }
 
 
-  async deleteCategory(id: string, currentUser: UserParams): Promise<HttpException> {
+  async deleteCategory(id: string): Promise<HttpException> {
     try {
-      const user = await this.userService.getUserByAnyParams(currentUser);
-      await this.categoryModel.deleteOne({_id: id, user});
+      await this.categoryModel.deleteOne({_id: id});
       return new HttpException('Category was deleted!', HttpStatus.OK);
     } catch (error) {
       throw new InternalServerErrorException();
