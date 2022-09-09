@@ -1,7 +1,8 @@
 import {
   Body,
   ClassSerializerInterceptor,
-  Controller, Delete,
+  Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -33,8 +34,8 @@ export class TasksController {
   @Post('')
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  createTask(@Body() params: CreateTaskDto, @CurrentUser() user: UserParams) {
-    return this.tasksService.create(params, user);
+  createTask(@Body() body: CreateTaskDto, @CurrentUser() user: UserParams) {
+    return this.tasksService.create(body, user);
   }
 
   @Put('/:id')
