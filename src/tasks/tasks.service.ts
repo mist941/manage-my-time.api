@@ -76,13 +76,10 @@ export class TasksService {
 
   async getTasks(queryParams, currentUser: UserParams) {
     const user = await this.userService.getUserByAnyParams(currentUser);
-    const filterParams = {
-      type: queryParams.type,
-      user
-    }
+    const filterParams = {type: queryParams.type, user};
 
     try {
-      const tasks = await this.taskModel.find(filterParams);
+      let tasks = await this.taskModel.find(filterParams).populate('categories');
       return tasks.map(task => new TaskEntity(task.toObject()));
     } catch (error) {
       throw new InternalServerErrorException();

@@ -74,7 +74,7 @@ export class CategoriesService {
     }
   }
 
-  async findCategoryById(id: string): Promise<Category> {
+  async findCategoryById(id: Category): Promise<Category> {
     try {
       return this.categoryModel.findById(id);
     } catch (error) {
