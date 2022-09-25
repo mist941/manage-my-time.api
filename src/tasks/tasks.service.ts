@@ -79,7 +79,14 @@ export class TasksService {
     const filterParams = {type: queryParams.type, user};
 
     try {
-      let tasks = await this.taskModel.find(filterParams).populate('categories');
+      let tasks = await this.taskModel
+        .find(filterParams, null, {
+          sort: {start_date: -1},
+          populate: 'categories',
+          limit: Number(queryParams.per_page),
+          skip: Number(queryParams.per_page) * Number(queryParams.page)
+        })
+
       return tasks.map(task => new TaskEntity(task.toObject()));
     } catch (error) {
       throw new InternalServerErrorException();
