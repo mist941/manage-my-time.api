@@ -58,7 +58,9 @@ export class TasksService {
     };
 
     try {
-      const task = await this.taskModel.findByIdAndUpdate(id, preparedParams, {new: true});
+      const task = await this.taskModel
+        .findByIdAndUpdate(id, preparedParams, {new: true})
+        .populate('categories');
       return new TaskEntity(task.toObject());
     } catch (error) {
       throw new InternalServerErrorException();
@@ -77,16 +79,15 @@ export class TasksService {
   async getTasks(queryParams, currentUser: UserParams) {
     const user = await this.userService.getUserByAnyParams(currentUser);
     const filterParams = {type: queryParams.type, user};
-
+    console.log(Number(queryParams.per_page) * Number(queryParams.page));
     try {
       let tasks = await this.taskModel
         .find(filterParams, null, {
-          sort: {start_date: -1},
+          sort: {start_date: 1},
           populate: 'categories',
           limit: Number(queryParams.per_page),
-          skip: Number(queryParams.per_page) * Number(queryParams.page)
-        })
-
+          skip: Number(queryParams.per_page) * (Number(queryParams.page) - 1)
+        });
       return tasks.map(task => new TaskEntity(task.toObject()));
     } catch (error) {
       throw new InternalServerErrorException();
