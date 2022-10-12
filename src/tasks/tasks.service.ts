@@ -78,8 +78,19 @@ export class TasksService {
 
   async getTasks(queryParams, currentUser: UserParams) {
     const user = await this.userService.getUserByAnyParams(currentUser);
-    const filterParams = {type: queryParams.type, user};
-    console.log(Number(queryParams.per_page) * Number(queryParams.page));
+    let filterParams = {type: queryParams.type, user};
+
+    if (queryParams.start_date) {
+      const date = new Date(queryParams.start_date);
+
+      filterParams = Object.assign(filterParams, {
+        start_date: {
+          $gte: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+          $lt: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1),
+        }
+      });
+    }
+
     try {
       let tasks = await this.taskModel
         .find(filterParams, null, {
@@ -88,6 +99,7 @@ export class TasksService {
           limit: Number(queryParams.per_page),
           skip: Number(queryParams.per_page) * (Number(queryParams.page) - 1)
         });
+
       return tasks.map(task => new TaskEntity(task.toObject()));
     } catch (error) {
       throw new InternalServerErrorException();

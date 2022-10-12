@@ -1,9 +1,9 @@
-import {IsNotEmpty, IsString, ValidateIf} from 'class-validator';
+import {IsString, ValidateIf} from 'class-validator';
 import {TasksTypes} from '../types/tasks.types';
 
 export class FindTasksDTO {
-  @IsNotEmpty()
   @IsString()
+  @ValidateIf((object, value) => !!value)
   readonly type: TasksTypes;
 
   @IsString()

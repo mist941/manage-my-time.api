@@ -28,6 +28,7 @@ export class TasksController {
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   tasks(@Query() queryParams: FindTasksDTO, @CurrentUser() user: UserParams) {
+    console.log(queryParams);
     return this.tasksService.getTasks(queryParams, user);
   }
 
