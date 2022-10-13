@@ -78,11 +78,16 @@ export class TasksService {
 
   async getTasks(queryParams, currentUser: UserParams) {
     const user = await this.userService.getUserByAnyParams(currentUser);
-    let filterParams = {type: queryParams.type, user};
+    let filterParams = {user};
+
+    if (queryParams.type) {
+      filterParams = Object.assign(filterParams, {
+        type: queryParams.type
+      })
+    }
 
     if (queryParams.start_date) {
       const date = new Date(queryParams.start_date);
-
       filterParams = Object.assign(filterParams, {
         start_date: {
           $gte: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
