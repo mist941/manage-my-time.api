@@ -28,4 +28,7 @@ export class UsersService {
 
     return this.userModel.findOne({stand_alone_key});
   }
+
+  async updatePushToken() {
+  }
 }
