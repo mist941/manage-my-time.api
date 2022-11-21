@@ -13,7 +13,10 @@ export class AuthService {
   async signIn(params: SignInDto): Promise<User> {
     try {
       const user = await this.userService.getUserByAnyParams(params);
-      if (user) return user;
+      if (user) {
+        await this.userService.updatePushToken(user, params.push_notification_token);
+        return user;
+      }
       return this.userService.create(params);
     } catch (error) {
       throw new InternalServerErrorException();

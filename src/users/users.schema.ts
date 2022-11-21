@@ -23,6 +23,12 @@ export class User {
     required: false,
   })
   email: string;
+
+  @Prop({
+    type: mongoose.Schema.Types.String,
+    required: true,
+  })
+  push_notification_token: string;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(User);

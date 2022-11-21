@@ -4,6 +4,7 @@ import {MongooseModule} from '@nestjs/mongoose';
 import {AuthModule} from './auth/auth.module'
 import {UsersModule} from './users/users.module';
 import {TasksModule} from './tasks/tasks.module';
+import {PushNotificationModule} from './push-notification/push-notification.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import {TasksModule} from './tasks/tasks.module';
     MongooseModule.forRoot(process.env.MONGO_CONFIG),
     UsersModule,
     AuthModule,
-    TasksModule
+    TasksModule,
+    PushNotificationModule
   ],
   controllers: [],
   providers: [],

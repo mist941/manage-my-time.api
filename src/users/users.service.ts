@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable, InternalServerErrorException} from '@nestjs/common';
 import {User, UserDocument} from './users.schema';
 import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
@@ -29,6 +29,13 @@ export class UsersService {
     return this.userModel.findOne({stand_alone_key});
   }
 
-  async updatePushToken() {
+  async updatePushToken(user: User | string, token: string) {
+    try {
+      await this.userModel
+        .findByIdAndUpdate(user, {push_notification_token: token}, {new: true});
+      return new HttpException('Push token was updated', HttpStatus.OK);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }
