@@ -36,6 +36,12 @@ export class TasksService {
       user,
     };
 
+    const extendedTask = await this.getTasksByDate(params.start_date, params.end_date);
+
+    if (extendedTask.length) {
+      throw new HttpException("There is already a scheduled task at this time", HttpStatus.CONFLICT)
+    }
+
     try {
       const task = await new this.taskModel(preparedParams);
       return new TaskEntity((await task.save()).toObject());
@@ -48,6 +54,12 @@ export class TasksService {
     const preparedCategories: Category[] = await Promise.all(
       (params.category_ids ?? []).map(id => this.categoriesService.findCategoryById(id))
     );
+
+    const extendedTask = await this.getTasksByDate(params.start_date, params.end_date);
+
+    if (extendedTask.length) {
+      throw new HttpException("There is already a scheduled task at this time", HttpStatus.CONFLICT)
+    }
 
     const preparedParams: Omit<Task, 'user' | 'type'> = {
       name: params.name,
@@ -76,7 +88,7 @@ export class TasksService {
     }
   }
 
-  async getTasks(queryParams, currentUser: UserParams) {
+  async getTasks(queryParams, currentUser: UserParams): Promise<Array<TaskEntity>> {
     const user = await this.userService.getUserByAnyParams(currentUser);
     let filterParams = {user};
 
@@ -107,6 +119,24 @@ export class TasksService {
 
       return tasks.map(task => new TaskEntity(task.toObject()));
     } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async getTasksByDate(startDate: Date, endDate: Date): Promise<Array<Task>> {
+    try {
+      return await this.taskModel
+        .find(
+          {
+            $or: [
+              {start_date: {$gte: startDate}},
+              {end_date: {$gte: endDate}},
+            ]
+          },
+          null,
+        )
+        .exec();
+    } catch (e) {
       throw new InternalServerErrorException();
     }
   }
