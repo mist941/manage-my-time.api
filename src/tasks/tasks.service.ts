@@ -36,9 +36,9 @@ export class TasksService {
       user,
     };
 
-    const extendedTask = await this.getTasksByDate(params.start_date, params.end_date);
+    const extendedTasks = await this.getTasksByDate(new Date(params.start_date), new Date(params.end_date));
 
-    if (extendedTask.length) {
+    if (extendedTasks.length) {
       throw new HttpException("There is already a scheduled task at this time", HttpStatus.CONFLICT)
     }
 
@@ -55,9 +55,9 @@ export class TasksService {
       (params.category_ids ?? []).map(id => this.categoriesService.findCategoryById(id))
     );
 
-    const extendedTask = await this.getTasksByDate(params.start_date, params.end_date);
-
-    if (extendedTask.length) {
+    let extendedTasks = await this.getTasksByDate(new Date(params.start_date), new Date(params.end_date));
+    extendedTasks = extendedTasks.filter(task => task._id.toString() !== id);
+    if (extendedTasks.length) {
       throw new HttpException("There is already a scheduled task at this time", HttpStatus.CONFLICT)
     }
 
@@ -123,16 +123,11 @@ export class TasksService {
     }
   }
 
-  async getTasksByDate(startDate: Date, endDate: Date): Promise<Array<Task>> {
+  async getTasksByDate(startDate: Date, endDate: Date): Promise<Array<TaskDocument>> {
     try {
       return await this.taskModel
         .find(
-          {
-            $or: [
-              {start_date: {$gte: startDate}},
-              {end_date: {$gte: endDate}},
-            ]
-          },
+          {start_date: {$lt: endDate}, end_date: {$gte: startDate}},
           null,
         )
         .exec();
