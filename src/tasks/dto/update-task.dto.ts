@@ -18,5 +18,13 @@ export class UpdateTaskDto {
 
   @ValidateIf((object, value) => !!value)
   @IsDateString()
+  readonly finished_date: Date;
+
+  @ValidateIf((object, value) => !!value)
+  @IsDateString()
+  readonly closed_date: Date;
+
+  @ValidateIf((object, value) => !!value)
+  @IsDateString()
   readonly spent_time: Date;
 }

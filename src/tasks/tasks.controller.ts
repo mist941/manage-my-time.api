@@ -45,6 +45,20 @@ export class TasksController {
     return this.tasksService.changeTask(params.id, body);
   }
 
+  @Put('/:id/complete')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  completeTask(@Param() params) {
+    return this.tasksService.completeTask(params.id);
+  }
+
+  @Put('/:id/close')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  closeTask(@Param() params) {
+    return this.tasksService.closeTask(params.id);
+  }
+
   @Delete('/:id')
   @UseGuards(AuthGuard)
   deleteTask(@Param() params) {

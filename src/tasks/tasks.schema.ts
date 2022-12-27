@@ -52,6 +52,18 @@ export class Task {
     required: false,
   })
   end_date: Date;
+
+  @Prop({
+    type: mongoose.Schema.Types.Date,
+    required: false,
+  })
+  finished_date: Date;
+
+  @Prop({
+    type: mongoose.Schema.Types.Date,
+    required: false,
+  })
+  closed_date: Date;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

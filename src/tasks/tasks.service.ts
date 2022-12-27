@@ -33,6 +33,8 @@ export class TasksService {
       spent_time: params.spent_time ?? null,
       type: params.type,
       categories: preparedCategories,
+      finished_date: null,
+      closed_date: null,
       user,
     };
 
@@ -57,6 +59,7 @@ export class TasksService {
 
     let extendedTasks = await this.getTasksByDate(new Date(params.start_date), new Date(params.end_date));
     extendedTasks = extendedTasks.filter(task => task._id.toString() !== id);
+
     if (extendedTasks.length) {
       throw new HttpException("There is already a scheduled task at this time", HttpStatus.CONFLICT)
     }
@@ -67,11 +70,35 @@ export class TasksService {
       end_date: params.end_date ?? null,
       spent_time: params.spent_time ?? null,
       categories: preparedCategories,
+      finished_date: params.finished_date ?? null,
+      closed_date: params.closed_date ?? null
     };
 
     try {
       const task = await this.taskModel
         .findByIdAndUpdate(id, preparedParams, {new: true})
+        .populate('categories');
+      return new TaskEntity(task.toObject());
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async completeTask(id: string): Promise<TaskEntity> {
+    try {
+      const task = await this.taskModel
+        .findByIdAndUpdate(id, {finished_date: Date.now()}, {new: true})
+        .populate('categories');
+      return new TaskEntity(task.toObject());
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async closeTask(id: string): Promise<TaskEntity> {
+    try {
+      const task = await this.taskModel
+        .findByIdAndUpdate(id, {closed_date: Date.now()}, {new: true})
         .populate('categories');
       return new TaskEntity(task.toObject());
     } catch (error) {
