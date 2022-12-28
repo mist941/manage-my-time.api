@@ -16,7 +16,8 @@ export class PushNotificationService {
   async handleCron() {
     let tasks = await this.getTasks();
     let messages = this.prepareMessages(tasks);
-    this.sendPushNotifications(messages);
+    await this.sendPushNotifications(messages);
+    await this.updateTasks(tasks);
   }
 
   async getTasks() {
@@ -24,7 +25,7 @@ export class PushNotificationService {
     const endDate = new Date(new Date().setUTCMinutes(startDate.getUTCMinutes() + 5));
     return await this.taskModel
       .find(
-        {start_date: {$gte: startDate, $lt: endDate}},
+        {start_date: {$gte: startDate, $lt: endDate}, sent_notification: false},
         null,
         {sort: {start_date: 1}, populate: 'user'}
       )
@@ -51,5 +52,11 @@ export class PushNotificationService {
         throw error;
       }
     }
+  }
+
+  async updateTasks(tasks: Array<TaskDocument>) {
+    tasks.forEach(task => {
+      this.taskModel.findByIdAndUpdate(task._id, {sent_notification: true}, {new: true}).exec();
+    });
   }
 }

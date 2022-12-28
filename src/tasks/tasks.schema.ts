@@ -64,6 +64,13 @@ export class Task {
     required: false,
   })
   closed_date: Date;
+
+  @Prop({
+    type: mongoose.Schema.Types.Boolean,
+    required: true,
+  })
+  sent_notification: Boolean;
+
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

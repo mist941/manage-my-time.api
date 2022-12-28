@@ -35,6 +35,7 @@ export class TasksService {
       categories: preparedCategories,
       finished_date: null,
       closed_date: null,
+      sent_notification: false,
       user,
     };
 
@@ -64,14 +65,12 @@ export class TasksService {
       throw new HttpException("There is already a scheduled task at this time", HttpStatus.CONFLICT)
     }
 
-    const preparedParams: Omit<Task, 'user' | 'type'> = {
+    const preparedParams: Omit<Task, 'user' | 'type' | 'finished_date' | 'closed_date' | 'sent_notification'> = {
       name: params.name,
       start_date: params.start_date,
       end_date: params.end_date ?? null,
       spent_time: params.spent_time ?? null,
       categories: preparedCategories,
-      finished_date: params.finished_date ?? null,
-      closed_date: params.closed_date ?? null
     };
 
     try {
