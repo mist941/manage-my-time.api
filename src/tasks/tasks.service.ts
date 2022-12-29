@@ -134,13 +134,29 @@ export class TasksService {
       });
     }
 
+    if (queryParams.end_date && queryParams.start_date) {
+      const startDate = new Date(queryParams.start_date);
+      const endDate = new Date(queryParams.end_date);
+      filterParams = Object.assign(filterParams, {
+        start_date: {
+          $gte: new Date(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate()),
+          $lt: new Date(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate() + 1),
+        }
+      });
+    }
+
+    if (queryParams.category) {
+      const category = await this.categoriesService.findCategoryById(queryParams.category);
+      filterParams = Object.assign(filterParams, {categories: category});
+    }
+
     try {
       let tasks = await this.taskModel
         .find(filterParams, null, {
           sort: {start_date: 1},
           populate: 'categories',
-          limit: Number(queryParams.per_page),
-          skip: Number(queryParams.per_page) * (Number(queryParams.page) - 1)
+          // limit: Number(queryParams.per_page),
+          // skip: Number(queryParams.per_page) * (Number(queryParams.page) - 1)
         });
 
       return tasks.map(task => new TaskEntity(task.toObject()));

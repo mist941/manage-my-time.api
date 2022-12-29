@@ -38,7 +38,7 @@ export class CategoriesService {
     }
   }
 
-  async createEmptyCategory(currentUser:UserParams): Promise<Category> {
+  async createEmptyCategory(currentUser: UserParams): Promise<Category> {
     try {
       const user = await this.userService.getUserByAnyParams(currentUser);
       return this.create({color: null, icon: null, name: 'Category', user});
@@ -74,7 +74,7 @@ export class CategoriesService {
     }
   }
 
-  async findCategoryById(id: Category): Promise<Category> {
+  async findCategoryById(id: Category | string): Promise<Category> {
     try {
       return this.categoryModel.findById(id);
     } catch (error) {
