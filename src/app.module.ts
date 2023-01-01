@@ -5,6 +5,7 @@ import {AuthModule} from './auth/auth.module'
 import {UsersModule} from './users/users.module';
 import {TasksModule} from './tasks/tasks.module';
 import {PushNotificationModule} from './push-notification/push-notification.module';
+import {StatisticsModule} from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import {PushNotificationModule} from './push-notification/push-notification.modu
     UsersModule,
     AuthModule,
     TasksModule,
-    PushNotificationModule
+    PushNotificationModule,
+    StatisticsModule,
   ],
   controllers: [],
   providers: [],

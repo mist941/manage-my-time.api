@@ -150,13 +150,24 @@ export class TasksService {
       filterParams = Object.assign(filterParams, {categories: category});
     }
 
+    if (queryParams.category) {
+      const category = await this.categoriesService.findCategoryById(queryParams.category);
+      filterParams = Object.assign(filterParams, {categories: category});
+    }
+
+    if (queryParams.completed) {
+      filterParams = Object.assign(filterParams, {finished_date: {$ne: null}});
+    }
+
+    if (queryParams.closed) {
+      filterParams = Object.assign(filterParams, {closed_date: {$ne: null}});
+    }
+
     try {
       let tasks = await this.taskModel
         .find(filterParams, null, {
           sort: {start_date: 1},
           populate: 'categories',
-          // limit: Number(queryParams.per_page),
-          // skip: Number(queryParams.per_page) * (Number(queryParams.page) - 1)
         });
 
       return tasks.map(task => new TaskEntity(task.toObject()));
