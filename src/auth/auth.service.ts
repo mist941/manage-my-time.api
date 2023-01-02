@@ -11,6 +11,7 @@ export class AuthService {
   }
 
   async signIn(params: SignInDto): Promise<User> {
+
     try {
       const user = await this.userService.getUserByAnyParams(params);
       if (user) {

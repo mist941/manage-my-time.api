@@ -41,8 +41,8 @@ export class TasksController {
   @Put('/:id')
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  changeTask(@Param() params, @Body() body: UpdateTaskDto) {
-    return this.tasksService.changeTask(params.id, body);
+  changeTask(@Param() params, @Body() body: UpdateTaskDto, @CurrentUser() user: UserParams) {
+    return this.tasksService.changeTask(params.id, body, user);
   }
 
   @Put('/:id/complete')
