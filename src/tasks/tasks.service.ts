@@ -9,6 +9,7 @@ import {CategoriesService} from '../categories/categories.service';
 import {Category} from '../categories/categories.schema';
 import {TaskEntity} from './tasks.entity';
 import {UpdateTaskDto} from './dto/update-task.dto';
+import {User} from '../users/users.schema';
 
 @Injectable()
 export class TasksService {
@@ -39,7 +40,7 @@ export class TasksService {
       user,
     };
 
-    const extendedTasks = await this.getTasksByDate(new Date(params.start_date), new Date(params.end_date));
+    const extendedTasks = await this.getTasksByDate(new Date(params.start_date), new Date(params.end_date), user);
 
     if (extendedTasks.length) {
       throw new HttpException("There is already a scheduled task at this time", HttpStatus.CONFLICT)
@@ -53,12 +54,14 @@ export class TasksService {
     }
   }
 
-  async changeTask(id: string, params: UpdateTaskDto): Promise<TaskEntity> {
+  async changeTask(id: string, params: UpdateTaskDto, currentUser: UserParams): Promise<TaskEntity> {
+    const user = await this.userService.getUserByAnyParams(currentUser);
+
     const preparedCategories: Category[] = await Promise.all(
       (params.category_ids ?? []).map(id => this.categoriesService.findCategoryById(id))
     );
 
-    let extendedTasks = await this.getTasksByDate(new Date(params.start_date), new Date(params.end_date));
+    let extendedTasks = await this.getTasksByDate(new Date(params.start_date), new Date(params.end_date), user);
     extendedTasks = extendedTasks.filter(task => task._id.toString() !== id);
 
     if (extendedTasks.length) {
@@ -176,11 +179,11 @@ export class TasksService {
     }
   }
 
-  async getTasksByDate(startDate: Date, endDate: Date): Promise<Array<TaskDocument>> {
+  async getTasksByDate(startDate: Date, endDate: Date, user: User): Promise<Array<TaskDocument>> {
     try {
       return await this.taskModel
         .find(
-          {start_date: {$lt: endDate}, end_date: {$gte: startDate}},
+          {user, start_date: {$lt: endDate}, end_date: {$gte: startDate}},
           null,
         )
         .exec();
