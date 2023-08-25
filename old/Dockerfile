@@ -6,7 +6,7 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+COPY .. .
 
 CMD ["npm", "run", "start"]
 
@@ -22,7 +22,7 @@ COPY package*.json ./
 
 RUN npm install --only=production
 
-COPY . .
+COPY .. .
 
 COPY --from=development /app/dist ./dist
 

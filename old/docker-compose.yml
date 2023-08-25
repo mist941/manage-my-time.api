@@ -4,9 +4,9 @@ services:
   dev:
     container_name: manage-my-time
     build:
-      context: .
+      context: ..
       target: development
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "3005:3005"
     restart: unless-stopped
