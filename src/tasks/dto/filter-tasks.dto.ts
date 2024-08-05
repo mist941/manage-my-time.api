@@ -1,16 +1,16 @@
 import {IsString, ValidateIf} from 'class-validator';
-import {TasksTypes} from '../types/tasks.types';
+import {TasksTypes} from '../tasks.types';
 
 export class FindTasksDTO {
   @IsString()
-  @ValidateIf((object, value) => !!value)
+  @ValidateIf((_, value) => !!value)
   readonly type: TasksTypes;
 
   @IsString()
-  @ValidateIf((object, value) => !!value)
+  @ValidateIf((_, value) => !!value)
   readonly page: number;
 
   @IsString()
-  @ValidateIf((object, value) => !!value)
+  @ValidateIf((_, value) => !!value)
   readonly per_page: number;
 }

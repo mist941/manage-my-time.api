@@ -13,7 +13,7 @@ export class AuthService {
   async signIn(params: SignInDto): Promise<User> {
 
     try {
-      const user = await this.userService.getUserByAnyParams(params);
+      const user = await this.userService.getUserByGoogleIdAndEmail(params);
       if (user) {
         await this.userService.updatePushToken(user, params.push_notification_token);
         return user;

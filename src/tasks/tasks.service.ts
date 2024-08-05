@@ -4,7 +4,7 @@ import {InjectModel} from '@nestjs/mongoose';
 import {UsersService} from '../users/users.service';
 import {Task, TaskDocument} from './tasks.schema';
 import {CreateTaskDto} from './dto/create-task.dto';
-import {UserParams} from '../users/types/user-params.type';
+import {UserParams} from '../users/users.types';
 import {CategoriesService} from '../categories/categories.service';
 import {Category} from '../categories/categories.schema';
 import {TaskEntity} from './tasks.entity';
@@ -21,7 +21,7 @@ export class TasksService {
   }
 
   async create(params: CreateTaskDto, currentUser: UserParams): Promise<TaskEntity> {
-    const user = await this.userService.getUserByAnyParams(currentUser);
+    const user = await this.userService.getUserByGoogleIdAndEmail(currentUser);
 
     const preparedCategories: Category[] = await Promise.all(
       (params.category_ids ?? []).map(id => this.categoriesService.findCategoryById(id))
@@ -55,7 +55,7 @@ export class TasksService {
   }
 
   async changeTask(id: string, params: UpdateTaskDto, currentUser: UserParams): Promise<TaskEntity> {
-    const user = await this.userService.getUserByAnyParams(currentUser);
+    const user = await this.userService.getUserByGoogleIdAndEmail(currentUser);
 
     const preparedCategories: Category[] = await Promise.all(
       (params.category_ids ?? []).map(id => this.categoriesService.findCategoryById(id))
@@ -118,7 +118,7 @@ export class TasksService {
   }
 
   async getTasks(queryParams, currentUser: UserParams): Promise<Array<TaskEntity>> {
-    const user = await this.userService.getUserByAnyParams(currentUser);
+    const user = await this.userService.getUserByGoogleIdAndEmail(currentUser);
     let filterParams = {user};
 
     if (queryParams.type) {

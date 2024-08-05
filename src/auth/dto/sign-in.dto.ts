@@ -3,15 +3,15 @@ import {IsEmail, IsString, ValidateIf} from 'class-validator';
 export class SignInDto {
   @IsString()
   @IsEmail()
-  @ValidateIf((object, value) => !!value)
+  @ValidateIf((_, value) => !!value)
   email: string;
 
   @IsString()
-  @ValidateIf((object, value) => !!value)
+  @ValidateIf((_, value) => !!value)
   google_id: string;
 
   @IsString()
-  @ValidateIf((object, value) => !!value)
+  @ValidateIf((_, value) => !!value)
   stand_alone_key: string;
 
   @IsString()

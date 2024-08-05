@@ -1,6 +1,6 @@
 import {Injectable, InternalServerErrorException} from '@nestjs/common';
 import {CategoriesService} from '../categories/categories.service';
-import {UserParams} from '../users/types/user-params.type';
+import {UserParams} from '../users/users.types';
 import {TasksService} from '../tasks/tasks.service';
 import {UsersService} from '../users/users.service';
 
@@ -27,7 +27,7 @@ export class StatisticsServices {
     }
   }
 
-  async getStatisticsByCategories(queryParams, currentUser: UserParams): Promise<any> {
+  async getStatisticsByCategories(currentUser: UserParams): Promise<any> {
     const categories = [];
     const categoriesByUser = await this.categoriesService.findCategoriesByUser(currentUser);
 

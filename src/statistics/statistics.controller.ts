@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
-import {UserParams} from '../users/types/user-params.type';
+import {UserParams} from '../users/users.types';
 import {StatisticsServices} from './statistics.service';
 
 @Controller('statistics')
@@ -25,7 +25,7 @@ export class StatisticsController {
   @Get('by-categories')
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  getStatisticsByCategories(@Query() queryParams, @CurrentUser() user: UserParams) {
-    return this.statisticsServices.getStatisticsByCategories(queryParams, user);
+  getStatisticsByCategories(@CurrentUser() user: UserParams) {
+    return this.statisticsServices.getStatisticsByCategories(user);
   }
 }

@@ -14,7 +14,7 @@ import {
 import {TasksService} from './tasks.service';
 import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
-import {UserParams} from '../users/types/user-params.type';
+import {UserParams} from '../users/users.types';
 import {CreateTaskDto} from './dto/create-task.dto';
 import {FindTasksDTO} from './dto/filter-tasks.dto';
 import {UpdateTaskDto} from './dto/update-task.dto';

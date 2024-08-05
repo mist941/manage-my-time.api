@@ -2,7 +2,7 @@ import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document} from 'mongoose';
 import mongoose from 'mongoose';
 import {User} from '../users/users.schema';
-import {TasksTypes} from './types/tasks.types';
+import {TasksTypes} from './tasks.types';
 import {Category} from '../categories/categories.schema';
 
 export type TaskDocument = Task & Document;

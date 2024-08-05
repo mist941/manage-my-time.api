@@ -3,7 +3,7 @@ import {CategoriesService} from './categories.service';
 import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
 import {Category} from './categories.schema';
-import {UserParams} from '../users/types/user-params.type';
+import {UserParams} from '../users/users.types';
 
 @Controller('categories')
 export class CategoriesController {
@@ -24,7 +24,7 @@ export class CategoriesController {
 
   @Post('/')
   @UseGuards(AuthGuard)
-  addCategory(@Param() params, @CurrentUser() user: UserParams) {
+  addCategory(@CurrentUser() user: UserParams) {
     return this.categoriesService.createEmptyCategory(user);
   }
 

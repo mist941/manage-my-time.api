@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
 
     if (!userFromHeaders) throw new UnauthorizedException('User is not logged in');
 
-    const user = await this.userService.getUserByAnyParams(JSON.parse(userFromHeaders));
+    const user = await this.userService.getUserByGoogleIdAndEmail(JSON.parse(userFromHeaders));
 
     if (!user) throw new NotFoundException('User not found');
 
