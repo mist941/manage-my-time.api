@@ -46,12 +46,8 @@ export class TasksService {
       throw new HttpException("There is already a scheduled task at this time", HttpStatus.CONFLICT)
     }
 
-    try {
-      const task = await new this.taskModel(preparedParams);
-      return new TaskEntity((await task.save()).toObject());
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
+    const task = new this.taskModel(preparedParams);
+    return new TaskEntity((await task.save()).toObject());
   }
 
   async changeTask(id: string, params: UpdateTaskDto, currentUser: UserParams): Promise<TaskEntity> {

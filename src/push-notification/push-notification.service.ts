@@ -46,11 +46,7 @@ export class PushNotificationService {
     let chunks = expo.chunkPushNotifications(messages);
 
     for (const chunk of chunks) {
-      try {
-        await expo.sendPushNotificationsAsync(chunk);
-      } catch (error) {
-        throw error;
-      }
+      await expo.sendPushNotificationsAsync(chunk);
     }
   }
 

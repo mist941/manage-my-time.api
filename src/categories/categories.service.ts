@@ -31,7 +31,7 @@ export class CategoriesService {
 
   async create(params: CreateCategoryDto): Promise<Category> {
     try {
-      const category = await new this.categoryModel(params);
+      const category = new this.categoryModel(params);
       return category.save();
     } catch (error) {
       throw new InternalServerErrorException();

@@ -11,7 +11,7 @@ export class UsersController {
   @Put('update_push_token')
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  changeTask(@Body() body: UpdateTokenDto) {
+  updatePushToken(@Body() body: UpdateTokenDto) {
     return this.usersService.updatePushToken(body.user_id, body.token);
   }
 }

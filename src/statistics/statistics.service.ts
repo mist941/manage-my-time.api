@@ -1,4 +1,4 @@
-import {Injectable, InternalServerErrorException} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {CategoriesService} from '../categories/categories.service';
 import {UserParams} from '../users/users.types';
 import {TasksService} from '../tasks/tasks.service';
@@ -17,13 +17,9 @@ export class StatisticsServices {
     const completedTasks = await this.tasksServices.getTasks({...queryParams, completed: true}, currentUser);
     const closedTasks = await this.tasksServices.getTasks({...queryParams, closed: true}, currentUser);
 
-    try {
-      return {
-        completed_tasks_count: completedTasks.length,
-        closed_tasks_count: closedTasks.length,
-      }
-    } catch (error) {
-      throw new InternalServerErrorException();
+    return {
+      completed_tasks_count: completedTasks.length,
+      closed_tasks_count: closedTasks.length,
     }
   }
 
@@ -41,10 +37,6 @@ export class StatisticsServices {
       });
     }
 
-    try {
-      return categories;
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
+    return categories;
   }
 }

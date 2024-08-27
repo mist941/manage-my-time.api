@@ -8,7 +8,7 @@ export class AuthController {
   }
 
   @Post('/sign-in')
-  registration(@Body() body: SignInDto) {
+  signIn(@Body() body: SignInDto) {
     return this.authService.signIn(body);
   }
 }
