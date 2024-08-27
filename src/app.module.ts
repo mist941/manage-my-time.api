@@ -1,18 +1,20 @@
-import {Module} from '@nestjs/common';
-import {ConfigModule} from '@nestjs/config';
-import {MongooseModule} from '@nestjs/mongoose';
-import {AuthModule} from './auth/auth.module'
-import {UsersModule} from './users/users.module';
-import {TasksModule} from './tasks/tasks.module';
-import {PushNotificationModule} from './push-notification/push-notification.module';
-import {StatisticsModule} from './statistics/statistics.module';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { TasksModule } from './tasks/tasks.module';
+import { PushNotificationModule } from './push-notification/push-notification.module';
+import { StatisticsModule } from './statistics/statistics.module';
+
+const mongoConfig = process.env.MONGO_CONFIG;
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(process.env.MONGO_CONFIG),
+    MongooseModule.forRoot(mongoConfig),
     UsersModule,
     AuthModule,
     TasksModule,
@@ -22,5 +24,4 @@ import {StatisticsModule} from './statistics/statistics.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {
-}
+export class AppModule {}

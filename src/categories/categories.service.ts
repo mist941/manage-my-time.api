@@ -5,7 +5,7 @@ import {Category, CategoryDocument} from './categories.schema';
 import {CreateCategoryDto} from './dto/create-category.dto';
 import {User} from '../users/users.schema';
 import {UsersService} from '../users/users.service';
-import {UserParams} from '../users/users.types';
+import {UserSignInParams} from '../users/users.types';
 
 @Injectable()
 export class CategoriesService {
@@ -38,7 +38,7 @@ export class CategoriesService {
     }
   }
 
-  async createEmptyCategory(currentUser: UserParams): Promise<Category> {
+  async createEmptyCategory(currentUser: UserSignInParams): Promise<Category> {
     try {
       const user = await this.userService.getUserByGoogleIdAndEmail(currentUser);
       return this.create({color: null, icon: null, name: 'Category', user});
@@ -65,7 +65,7 @@ export class CategoriesService {
     }
   }
 
-  async findCategoriesByUser(currentUser: UserParams): Promise<Array<Category>> {
+  async findCategoriesByUser(currentUser: UserSignInParams): Promise<Array<Category>> {
     try {
       const user = await this.userService.getUserByGoogleIdAndEmail(currentUser);
       return this.categoryModel.find({user}).select('-__v');

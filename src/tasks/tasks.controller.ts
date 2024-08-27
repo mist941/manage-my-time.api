@@ -14,7 +14,7 @@ import {
 import {TasksService} from './tasks.service';
 import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
-import {UserParams} from '../users/users.types';
+import {UserSignInParams} from '../users/users.types';
 import {CreateTaskDto} from './dto/create-task.dto';
 import {FindTasksDTO} from './dto/filter-tasks.dto';
 import {UpdateTaskDto} from './dto/update-task.dto';
@@ -27,21 +27,21 @@ export class TasksController {
   @Get('')
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  tasks(@Query() queryParams: FindTasksDTO, @CurrentUser() user: UserParams) {
+  tasks(@Query() queryParams: FindTasksDTO, @CurrentUser() user: UserSignInParams) {
     return this.tasksService.getTasks(queryParams, user);
   }
 
   @Post('')
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  createTask(@Body() body: CreateTaskDto, @CurrentUser() user: UserParams) {
+  createTask(@Body() body: CreateTaskDto, @CurrentUser() user: UserSignInParams) {
     return this.tasksService.create(body, user);
   }
 
   @Put('/:id')
   @UseGuards(AuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  changeTask(@Param() params, @Body() body: UpdateTaskDto, @CurrentUser() user: UserParams) {
+  changeTask(@Param() params, @Body() body: UpdateTaskDto, @CurrentUser() user: UserSignInParams) {
     return this.tasksService.changeTask(params.id, body, user);
   }
 

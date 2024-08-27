@@ -3,7 +3,7 @@ import {CategoriesService} from './categories.service';
 import {AuthGuard} from '../auth/auth.guard';
 import {CurrentUser} from '../users/user.decorator';
 import {Category} from './categories.schema';
-import {UserParams} from '../users/users.types';
+import {UserSignInParams} from '../users/users.types';
 
 @Controller('categories')
 export class CategoriesController {
@@ -12,7 +12,7 @@ export class CategoriesController {
 
   @Get('')
   @UseGuards(AuthGuard)
-  categories(@CurrentUser() user: UserParams) {
+  categories(@CurrentUser() user: UserSignInParams) {
     return this.categoriesService.findCategoriesByUser(user);
   }
 
@@ -24,7 +24,7 @@ export class CategoriesController {
 
   @Post('/')
   @UseGuards(AuthGuard)
-  addCategory(@CurrentUser() user: UserParams) {
+  addCategory(@CurrentUser() user: UserSignInParams) {
     return this.categoriesService.createEmptyCategory(user);
   }
 

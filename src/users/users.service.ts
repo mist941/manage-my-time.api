@@ -4,7 +4,7 @@ import {Model} from 'mongoose';
 import {InjectModel} from '@nestjs/mongoose';
 import {CreateUserDto} from './dto/create-user.dto';
 import {CategoriesService} from '../categories/categories.service';
-import {UserParams} from './users.types';
+import {UserSignInParams} from './users.types';
 
 @Injectable()
 export class UsersService {
@@ -15,24 +15,37 @@ export class UsersService {
   }
 
   async create(params: CreateUserDto): Promise<User> {
-    const user = await new this.userModel(params);
-    const createdUser = await user.save();
-    await this.categoriesService.addDefaultCategories(createdUser);
-    return user;
-  }
-
-  async getUserByGoogleIdAndEmail(params: UserParams): Promise<User> {
-    const {google_id, email, stand_alone_key} = params;
-
-    if (google_id && email) return this.userModel.findOne({google_id, email});
-
-    return this.userModel.findOne({stand_alone_key});
-  }
-
-  async updatePushToken(user: User | string, token: string) {
     try {
-      await this.userModel
-        .findByIdAndUpdate(user, {push_notification_token: token}, {new: true});
+      const createdUser = await this.saveUser(params);
+      await this.categoriesService.addDefaultCategories(createdUser);
+      return createdUser;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  private async saveUser(params: CreateUserDto): Promise<User> {
+    try {
+      const user = new this.userModel(params);
+      return await user.save();
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async getUserByGoogleIdAndEmail(params: UserSignInParams): Promise<User | null> {
+    const {google_id, email, stand_alone_key} = params;
+    try {
+      if (google_id && email) return this.userModel.findOne({google_id, email});
+      return this.userModel.findOne({stand_alone_key});
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async updatePushToken(user: User | string, token: string): Promise<HttpException> {
+    try {
+      await this.userModel.findByIdAndUpdate(user, {push_notification_token: token}, {new: true});
       return new HttpException('Push token was updated', HttpStatus.OK);
     } catch (error) {
       throw new InternalServerErrorException();
