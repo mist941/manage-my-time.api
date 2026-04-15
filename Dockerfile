@@ -1,11 +1,11 @@
-FROM node:24-slim AS builder
+FROM node:22-slim AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install
 COPY . .
 RUN npm run build
 
-FROM node:24-slim
+FROM node:22-slim
 WORKDIR /app
 COPY --from=builder /app/dist .
 
