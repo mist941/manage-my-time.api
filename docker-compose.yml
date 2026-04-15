@@ -22,5 +22,18 @@ services:
     depends_on:
       - mongo
 
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp
+
 volumes:
   mongo_data:
