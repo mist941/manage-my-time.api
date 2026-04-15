@@ -21,3 +21,6 @@ services:
       - ME_CONFIG_MONGODB_URL=mongodb://admin:admin@mongodb:27017/
     depends_on:
       - mongo
+
+volumes:
+  mongo_data:
