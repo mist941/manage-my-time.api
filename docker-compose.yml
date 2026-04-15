@@ -1,8 +1,7 @@
-version: '3.9'
-
 services:
   mongo:
     image: mongo:latest
+    container_name: mongodb
     ports:
       - '27017:27017'
     volumes:
@@ -10,3 +9,15 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    ports:
+      - '8081:8081'
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=admin
+      - ME_CONFIG_MONGODB_URL=mongodb://admin:admin@mongodb:27017/
+    depends_on:
+      - mongo
