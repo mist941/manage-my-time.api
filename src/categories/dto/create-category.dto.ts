@@ -1,5 +1,4 @@
 import {IsNotEmpty, IsString} from 'class-validator';
-import {User} from '../../users/users.schema';
 
 export class CreateCategoryDto {
   @IsString()
@@ -13,5 +12,5 @@ export class CreateCategoryDto {
   readonly name: string;
 
   @IsNotEmpty()
-  readonly user: User;
+  readonly user: string;
 }

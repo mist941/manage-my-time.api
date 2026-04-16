@@ -33,7 +33,7 @@ export class UsersService {
     }
   }
 
-  async getUserByGoogleIdAndEmail(params: UserSignInParams): Promise<User | null> {
+  async getUserByGoogleIdAndEmail(params: UserSignInParams): Promise<UserDocument | null> {
     const {google_id, email, stand_alone_key} = params;
     try {
       if (google_id && email) return this.userModel.findOne({google_id, email});
